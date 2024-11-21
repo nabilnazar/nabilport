@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">techsmithsample</string>
+    <string name="strRetry">Retry</string>
+    <string name="strFetchingDataFromServer">Fetching data from server</string>
+    <string name="str_cart">Cart</string>
+    <string name="str_add_to_cart">Add To Cart</string>
+    <string name="str_plus">Plus</string>
+    <string name="str_minus">Minus</string>
+    <string name="str_maximum_rating">/5(Rating)</string>
+    <string name="str_subtotal">SubTotal</string>
+    <string name="str_no_items_in_cart">No items in your cart!</string>
+    <string name="str_dashboard">Dashboard</string>
+</resources>
