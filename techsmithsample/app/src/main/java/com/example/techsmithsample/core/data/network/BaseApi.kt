@@ -21,7 +21,6 @@ interface BaseApi {
                 .build()
 
             val gson = GsonBuilder()
-                .setLenient()
                 .create()
 
             return Retrofit

@@ -5,9 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.techsmithsample.presentation.ui.ContactScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.techsmithsample.presentation.navigation.ScreenNavigation
 import com.example.techsmithsample.presentation.ui.theme.TechSmithSampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,12 +18,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TechSmithSampleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-                    val names = mapOf(Pair("dsdsds","76868686"), Pair("nabil","9388283324"),Pair("ponnum","7034193748"),Pair("husain","9090909"),)
-
-                        ContactScreen(names)
-
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val navController = rememberNavController()
+                    ScreenNavigation(navController )
                 }
             }
         }

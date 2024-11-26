@@ -83,7 +83,7 @@ fun callTheNum(phoneNumber: String, ctx: Context) {
 
         // Launch the Phone app's dialer with a phone
         // number to dial a call.
-        ctx.startActivity(i)
+       // ctx.startActivity(i)
     } catch (s: SecurityException) {
 
         // show() method display the toast with
