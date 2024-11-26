@@ -1,5 +1,6 @@
 package com.example.techsmithsample.presentation.screen.home.presentation
 
+import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Alignment
@@ -24,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -73,7 +75,7 @@ private fun GetHomeData(viewModel: HomeViewModel) {
 private fun DrawContent(
     homeViewModel: HomeViewModel, navController: NavController
 ) {
-
+    val context = LocalContext.current
     val productPagingItem = homeViewModel.productsState.collectAsLazyPagingItems()
     var isRefreshing by remember { mutableStateOf(false) }
     val state = rememberPullToRefreshState()
@@ -119,7 +121,7 @@ private fun DrawContent(
                         items(productPagingItem.itemCount) { index ->
                             productPagingItem[index]?.let { product ->
                                 DrawProductCard(product = product) {
-                                    navController.navigate(Screen.ProductDetailUI.route.plus("?${Keys.KEY_PRODUCT_ID}=${product.id ?: Constants.INVALID_ID}"))
+                                    Toast.makeText(context, "#TODO Product detail", Toast.LENGTH_LONG).show()
                                 }
                             }
                         }
