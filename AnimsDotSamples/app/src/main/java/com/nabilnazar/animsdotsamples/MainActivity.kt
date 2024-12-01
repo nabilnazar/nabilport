@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AnimsDotSamplesTheme {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    LiquidSwipeDemo()
+                   LiquidSwipeExample()
                 }
             }
         }

@@ -1,15 +1,16 @@
 package com.nabilnazar.animsdotsamples
 
+
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
- import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.Canvas
 
-@Composable
+ @Composable
 fun LiquidSwipe(
     pages: List<Color>,
     modifier: Modifier = Modifier
@@ -17,45 +18,46 @@ fun LiquidSwipe(
     var currentPage by remember { mutableStateOf(0) }
     var swipeOffsetX by remember { mutableStateOf(0f) }
 
-    val width = remember { mutableStateOf(0f) }
-
     Canvas(
         modifier = modifier
             .fillMaxSize()
             .pointerInput(Unit) {
-                detectHorizontalDragGestures(
-                    onHorizontalDrag = { change, dragAmount ->
-                        swipeOffsetX = (swipeOffsetX + dragAmount).coerceIn(-width.value, width.value)
-                        if (swipeOffsetX > width.value /5) {
-                            currentPage = (currentPage - 1).coerceAtLeast(0)
-                            swipeOffsetX = 0f
-                        } else if (swipeOffsetX < -width.value/5 ) {
-                            currentPage = (currentPage + 1).coerceAtMost(pages.size - 1)
-                            swipeOffsetX = 0f
-                        }
+                detectHorizontalDragGestures { _, dragAmount ->
+                    swipeOffsetX += dragAmount
+                    if (swipeOffsetX > size.width / 2) {
+                        currentPage = (currentPage - 1).coerceAtLeast(0)
+                        swipeOffsetX = 0f
+                    } else if (swipeOffsetX < -size.width / 2) {
+                        currentPage = (currentPage + 1).coerceAtMost(pages.size - 1)
+                        swipeOffsetX = 0f
                     }
-                )
+                }
             }
     ) {
-        width.value = size.width
+        val width = size.width
+        val height = size.height
 
-        // Draw current page
+        // Draw the current page
         drawRect(color = pages[currentPage], size = size)
 
         if (currentPage < pages.size - 1) {
-            // Draw next page with liquid effect
-            val path = Path().apply{
-                moveTo(width.value + swipeOffsetX, 0f)
-                quadraticTo(
-                    width.value + swipeOffsetX, size.height,
-                    width.value + swipeOffsetX, size.height,
+            // Draw the next page with a liquid swipe effect
+            val path = Path().apply {
+                moveTo(width + swipeOffsetX, 0f)
+                lineTo(width, 0f)
 
+                // Top bulge curve
+                cubicTo(
+                    width + swipeOffsetX / 2, height / 3, // First control point
+                    width + swipeOffsetX / 2, 2 * height / 3, // Second control point
+                    width + swipeOffsetX, height
                 )
-                lineTo(width.value, size.height)
-                lineTo(width.value, 0f)
+
+                lineTo(width, height)
                 close()
             }
-            drawPath(path, color = pages[currentPage + 1])
+
+            drawPath(path = path, color = pages[currentPage + 1])
         }
     }
 }
@@ -69,5 +71,5 @@ fun LiquidSwipeDemo() {
         Color(0xFFFFD460)
     )
 
-    LiquidSwipe(pages = pages)
+    LiquidSwipe(pages = pages, modifier = Modifier.fillMaxSize())
 }
