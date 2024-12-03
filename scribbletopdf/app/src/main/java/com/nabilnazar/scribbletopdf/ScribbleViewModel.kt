@@ -25,4 +25,9 @@ class ScribbleViewModel : ViewModel() {
             }
         }
     }
+
+
+    fun clearPaths() {
+        paths = emptyList()
+    }
 }

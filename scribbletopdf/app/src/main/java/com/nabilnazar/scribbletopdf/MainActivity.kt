@@ -1,9 +1,11 @@
 package com.nabilnazar.scribbletopdf
 
 import android.os.Bundle
- import androidx.activity.ComponentActivity
+import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -32,27 +34,45 @@ import com.nabilnazar.scribbletopdf.ui.theme.ScribbleToPdfTheme
 
 
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 class MainActivity : ComponentActivity() {
+
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, "Notification permission granted!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Notification permission denied!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestPermissionLauncher.launch("android.permission.POST_NOTIFICATIONS")
+        // Turn off the decor fitting system windows, which allows us to handle insets,
+        // including IME animations
         enableEdgeToEdge()
         setContent {
             ScribbleToPdfTheme {
-
                ScribbleApp()
             }
         }
     }
+
+
 }
 
 @Composable
 fun ScribbleApp() {
     // State hoisted to the parent
     val viewModel: ScribbleViewModel = viewModel()
-
+    val context = LocalContext.current
 
     Scaffold(
         bottomBar = {
@@ -60,12 +80,19 @@ fun ScribbleApp() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+
                 TextButton(onClick = {
-                   // generatePdfFromCanvas(paths) // Pass hoisted state to the PDF generator
+                    generatePdfFromCanvas(context, viewModel.paths)
                 }) {
                     Text("Generate PDF")
+                }
+
+                TextButton(onClick = {
+                    viewModel.clearPaths() // Clear the canvas
+                }) {
+                    Text("Clear")
                 }
             }
         }
@@ -170,5 +197,6 @@ fun ScribbleCanvas(
         }
     }
 }
+
 
 
