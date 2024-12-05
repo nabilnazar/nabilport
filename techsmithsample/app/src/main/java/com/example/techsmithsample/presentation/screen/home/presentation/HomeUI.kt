@@ -1,5 +1,6 @@
 package com.example.techsmithsample.presentation.screen.home.presentation
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.layout.Column
@@ -89,7 +90,7 @@ private fun DrawContent(
         }
 
     }
-
+  Log.i("TAG", "DrawContent: ${productPagingItem.itemCount}")
     Scaffold(
         modifier = Modifier.pullToRefresh(
             state = state, isRefreshing = isRefreshing, onRefresh = onRefresh

@@ -18,6 +18,7 @@ fun ScreenNavigation(
         composable(route = Screen.HomeUI.route) {
             NavigateToHomeUI(navController = navHostController)
         }
+
     }
 }
 
