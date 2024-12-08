@@ -20,56 +20,63 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.nabilnazar.motionsensordemo.ui.theme.MotionSensorDemoTheme
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class MainActivity : ComponentActivity() {
+
+    private val sensorManager by lazy {
+        getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    }
+    private val sensor: Sensor? by lazy {
+        sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
-
         setContent {
             MotionSensorDemoTheme {
-                StepCounterScreen(sensorManager, sensor)
+                if (sensor == null) {
+                    Text(text = "Step counter sensor is not present on this device")
+                } else {
+                    StepCounterScreen(sensorManager, sensor!!)
+                }
             }
         }
     }
 }
 
+// Helper function to create a Flow from the step counter sensor
+fun SensorManager.stepCounterFlow(sensor: Sensor): Flow<Float> = callbackFlow {
+    val listener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent?) {
+            event?.values?.get(0)?.let { trySend(it).isSuccess }
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    }
+
+    registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+    awaitClose { unregisterListener(listener) }
+}
+
 @Composable
-fun StepCounterScreen(sensorManager: SensorManager, sensor: Sensor?) {
+fun StepCounterScreen(sensorManager: SensorManager, sensor: Sensor) {
     var totalSteps by remember { mutableStateOf(0f) }
     var baselineSteps by remember { mutableStateOf(0f) }
     var displaySteps by remember { mutableStateOf(0) }
 
-    DisposableEffect(Unit) {
-        val listener = object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent?) {
-                event?.values?.get(0)?.let { currentSteps ->
-                    if (baselineSteps == 0f) {
-                        baselineSteps = currentSteps // Set baseline on first sensor change
-                    }
-                    totalSteps = currentSteps
-                    displaySteps = (totalSteps - baselineSteps).toInt() // Calculate steps since reset
-                }
-            }
-
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                // No-op
-            }
-        }
-
-        sensor?.let {
-            sensorManager.registerListener(listener, it, SensorManager.SENSOR_DELAY_UI)
-        }
-
-        onDispose {
-            sensorManager.unregisterListener(listener)
+    // Collect step data using Flow
+    LaunchedEffect(sensor) {
+        sensorManager.stepCounterFlow(sensor).collect { currentSteps ->
+            if (baselineSteps == 0f) baselineSteps = currentSteps
+            totalSteps = currentSteps
+            displaySteps = (totalSteps - baselineSteps).toInt()
         }
     }
 
-    // UI Layout
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Box(
             modifier = Modifier
@@ -80,9 +87,8 @@ fun StepCounterScreen(sensorManager: SensorManager, sensor: Sensor?) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Step Count: $displaySteps")
                 Button(onClick = {
-                    // Reset baseline steps
                     baselineSteps = totalSteps
-                    displaySteps = 0 // Immediately reflect reset in the UI
+                    displaySteps = 0 // Reset display steps
                 }) {
                     Text("Reset Step Counter")
                 }
