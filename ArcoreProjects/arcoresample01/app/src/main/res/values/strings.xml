@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ArcoreSample01</string>
+    <string name="point_your_phone_down">point you phone down\n</string>
+    <string name="tap_anywhere_to_add_model">tap anywhere to add model\n</string>
+</resources>
