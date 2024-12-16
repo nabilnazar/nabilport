@@ -63,4 +63,7 @@ dependencies {
 
     // For interop APIs with Material 3
     implementation("androidx.glance:glance-material3:1.1.0")
+
+
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 }
