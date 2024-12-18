@@ -59,7 +59,6 @@ import io.getstream.video.android.model.User
 import kotlinx.coroutines.launch
 
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +86,7 @@ class MainActivity : ComponentActivity() {
         ).build()
 
         setContent {
-            // Request permissions and join a call, which type is `default` and id is `123`.
+            // Request permissions and join a call, which type is `default` and  
             val call = client.call(type = "default", id = callId)
             LaunchCallPermissions(
                 call = call,
@@ -170,18 +169,18 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-        @Composable
-        fun CallEnded() {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Call Ended",
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
+@Composable
+fun CallEnded() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Call Ended",
+            color = Color.White,
+            textAlign = TextAlign.Center
+        )
+    }
+}

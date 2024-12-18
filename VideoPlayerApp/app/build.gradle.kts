@@ -66,4 +66,8 @@ dependencies {
     implementation( "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     // ViewModel utilities for Compose
     implementation( "androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
+
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+
 }
