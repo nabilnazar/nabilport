@@ -1,6 +1,7 @@
 package com.nabilnazar.offlinefirstapp.di
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.nabilnazar.offlinefirstapp.data.db.AppDatabase
 import com.nabilnazar.offlinefirstapp.data.db.CalculationDao
 import com.nabilnazar.offlinefirstapp.data.remote.SupabaseService
@@ -41,5 +42,14 @@ object AppModule {
         supabaseClient: SupabaseClient
     ): CalculationRepository {
         return CalculationRepository(dao, supabaseClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(
+        @ApplicationContext context: Context
+    ): WorkManager {
+        return WorkManager.getInstance(context)
+        
     }
 }
