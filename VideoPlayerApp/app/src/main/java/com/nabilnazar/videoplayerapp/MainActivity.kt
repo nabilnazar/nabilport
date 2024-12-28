@@ -1,6 +1,7 @@
 package com.nabilnazar.videoplayerapp
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -49,6 +50,7 @@ import androidx.media3.ui.PlayerView
 import com.nabilnazar.videoplayerapp.ui.theme.VideoPlayerAppTheme
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 
@@ -141,15 +143,29 @@ fun VideoListScreen(
                 }
             }
         }
+        val youTubePlayerView = remember { YouTubePlayerView(activity) }
+         youTubePlayerView.addFullscreenListener(object : FullscreenListener{
+             override fun onEnterFullscreen(
+                 fullscreenView: View,
+                 exitFullscreen: () -> Unit
+             ) {
+                 activity.setContentView(fullscreenView)
+             }
+
+             override fun onExitFullscreen() {
+
+             }
+         })
 
         // YouTube Player view
         selectedVideoId?.let { videoId ->
             AndroidView(factory = { context ->
-                YouTubePlayerView(context).apply {
+                YouTubePlayerView(activity).apply {
                     addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                         override fun onReady(youTubePlayer: YouTubePlayer) {
                             super.onReady(youTubePlayer)
                             youTubePlayer.loadVideo(videoId, 0f)
+                            youTubePlayer.toggleFullscreen()
                         }
                     })
                 }

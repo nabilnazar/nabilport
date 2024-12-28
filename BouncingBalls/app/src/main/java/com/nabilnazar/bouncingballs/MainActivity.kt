@@ -34,18 +34,22 @@ fun BouncingBallsGame() {
         val ballRadiusDp = 10f
         val density = LocalDensity.current.density
 
+
         var ballPositions by remember { mutableStateOf(
             listOf(
-                Offset(100f, 100f), // Ball 1
-                Offset(200f, 150f), // Ball 2
-                Offset(300f, 200f)  // Ball 3
+                Offset(100f, 100f),
+                Offset(200f, 150f),
+                Offset(300f, 200f),
+                Offset(400f, 200f)
             )
         )}
         var ballVelocities by remember { mutableStateOf(
             listOf(
-                Offset(8f, 9f), // Ball 1 Velocity
-                Offset(-6f, 7f), // Ball 2 Velocity
-                Offset(5f, -5f)  // Ball 3 Velocity
+                // Ball Velocity
+                Offset(5f, -5f),
+                Offset(-5f, 5f),
+                Offset(5f, -5f),
+                Offset(-5f, 5f),
             )
         )}
 
