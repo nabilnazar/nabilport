@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun DialogContent(onClose: () -> Unit) {
+    fun DialogContent(onClose: () -> Unit, showButton: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,7 +68,10 @@ class MainActivity : ComponentActivity() {
                     .padding(bottom = 20.dp)
             )
             TextButton(
-                onClick = onClose,
+                onClick = {
+                    onClose()
+                    showButton()
+                },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 10.dp)
@@ -84,6 +89,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun Content() {
         var openDialog by remember { mutableStateOf(false) }
+        var showButton by remember { mutableStateOf(true) }
 
         Box(
             modifier = Modifier
@@ -95,29 +101,40 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Button(
-                    onClick = { openDialog = true },
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .xBlur(context = LocalContext.current)
-                ) {
-                    Text(text = "Open Dialog")
+                if (showButton) {
+                    Button(
+                        onClick = {
+                            openDialog = true
+                            showButton = false
+                        },
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .xBlur(context = LocalContext.current)
+                    ) {
+                        Text(text = "Open Dialog")
+                    }
                 }
 
             }
 
             if (openDialog) {
                 BlurDialog(
-                    content = { DialogContent { openDialog = false } },
-                    blurRadius = 50,
-                    onDismiss = { openDialog = false },
-                    size = IntOffset(280, 160),
-                    shape = RoundedCornerShape(30.dp),
-                    backgroundColor = Color.White,
-                    backgroundColorAlpha = 0.5f,
-                    isRealtime = false,
-                    dialogDimAmount = 0.3f
-                )
+                    blurRadius = 250,                       //blur radius
+                    onDismiss = {
+                        openDialog = false
+                        showButton = true
+                    },     //dialog ondismiss
+                    size = IntOffset(280, 160),              //dialog size
+                    shape = RoundedCornerShape(30.dp),      //dialog shape
+                    backgroundColor = Color.White,          //mixing color with dialog
+                    backgroundColorAlpha = 0.4f,            //mixing color alpha
+                    dialogDimAmount = 0.3f,                 //set this if you want dark behind dialog.
+                    dialogBehindBlurRadius = 100,           //blur behind dialog
+                    isRealtime = true
+                ) {
+                    DialogContent(onClose = {openDialog = false}){
+                        showButton = true }
+                }
             }
         }
     }
