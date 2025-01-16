@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "452725288259",
+    "project_id": "deck52firebaseml",
+    "storage_bucket": "deck52firebaseml.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452725288259:android:4911ba73e56310008d53f6",
+        "android_client_info": {
+          "package_name": "com.nabilnazar.deck52firebasemlkit4gesturebasedmenu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwghE7NVCbgYOT8iC87fdYKwwIsQJMtVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
