@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">deck58nestedNavigationinCompose</string>
+    <string name="home">home\n</string>
+    <string name="search">search\n</string>
+    <string name="favorites">favorites\n</string>
+    <string name="profile">profile\n</string>
+    <string name="home_detail">details</string>
+    <string name="home_detail_info">detail info\n</string>
+    <string name="search_detail">search detail</string>
+    <string name="search_result">search result\n</string>
+</resources>
